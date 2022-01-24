@@ -1,5 +1,6 @@
 import * as THREE from 'three'
 import Sketch from './Sketch.js'
+import { background } from './config/settings.js'
 
 export default class Renderer {
 	constructor() {
@@ -17,14 +18,16 @@ export default class Renderer {
 		this.instance = new THREE.WebGLRenderer({
 			canvas: this.canvas,
 			antialias: true,
-			// alpha: true,
+			alpha: false,
 			powerPreference: 'high-performance',
 		})
 		// this.instance.outputEncoding = THREE.sRGBEncoding
 		// this.instance.physicallyCorrectLights = true
+		// this.instance.toneMapping = THREE.LinearToneMapping
 		// this.instance.toneMapping = THREE.ACESFilmicToneMapping
 		// this.instance.toneMapping = THREE.ReinhardToneMapping
-		this.instance.setClearColor('#232323')
+		// this.instance.setClearColor(background.color)
+		this.instance.setClearColor(0x232323)
 		this.instance.setSize(this.viewport.width, this.viewport.height)
 		this.instance.setPixelRatio(this.viewport.pixelRatio)
 	}

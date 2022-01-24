@@ -11,14 +11,15 @@ export default class Camera {
 		this.canvas = this.sketch.canvas
 
 		this.setInstance()
-		// this.setOrbitControls()
+		this.setOrbitControls()
 		this.setMouseControls()
 	}
 
 	setInstance() {
 		this.instance = new THREE.PerspectiveCamera(50, this.viewport.width / this.viewport.height, .1, 100)
-		this.instance.lookAt(new THREE.Vector3(0, 0, 0))
-		this.instance.position.set(0, 0, 4)
+		// this.instance.lookAt(new THREE.Vector3(0, 0, 0))
+		// this.instance.position.set(0, 0, 3.2)
+		this.instance.position.set(0, 0, 0)
 		this.scene.add(this.instance)
 	}
 
@@ -35,13 +36,24 @@ export default class Camera {
 		})
 	}
 
+	fitTo(object, offset = 1) {
+		const box = new THREE.Box3().setFromObject(object)
+		const size = box.getSize(new THREE.Vector3())
+
+		let distance = size.x / (2 * Math.atan(Math.PI * this.instance.fov / 360))
+		distance /= this.instance.aspect
+		distance *= offset
+
+		this.instance.position.z = distance
+	}
+
 	resize() {
 		this.instance.aspect = this.viewport.width / this.viewport.height
 		this.instance.updateProjectionMatrix()
 	}
 
 	update(elapsed, delta) {
-		// this.orbitControls.update()
+		this.orbitControls.update()
 		this.mouseControls.update(elapsed, delta)
 	}
 }

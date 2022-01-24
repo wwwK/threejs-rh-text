@@ -46,7 +46,7 @@ export default class Resources extends EventEmitter {
 
 		for (const source of this.sources) {
 			if (this.items[source.name]) {
-				this.sourceLoaded(source, this.items[source.name])
+				this.onSourceLoaded(source, this.items[source.name])
 				continue
 			}
 
@@ -54,21 +54,21 @@ export default class Resources extends EventEmitter {
 				case 'gltf': {
 					this.loaders.gltfLoader.load(
 						source.path,
-						file => this.sourceLoaded(source, file),
+						file => this.onSourceLoaded(source, file),
 					)
 					break
 				}
 				case 'texture': {
 					this.loaders.textureLoader.load(
 						source.path,
-						file => this.sourceLoaded(source, file),
+						file => this.onSourceLoaded(source, file),
 					)
 					break
 				}
 				case 'rgbe': {
 					this.loaders.rgbeLoader.load(
 						source.path,
-						file => this.sourceLoaded(source, file),
+						file => this.onSourceLoaded(source, file),
 					)
 					break
 				}
@@ -76,7 +76,7 @@ export default class Resources extends EventEmitter {
 		}
 	}
 
-	sourceLoaded(source, file) {
+	onSourceLoaded(source, file) {
 		file.name = source.name
 		this.items[source.name] = file
 		this.loaded++

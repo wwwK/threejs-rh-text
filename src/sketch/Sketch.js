@@ -17,14 +17,25 @@ export default class Sketch {
 
 		this.debug = new Debug()
 		this.viewport = new Viewport()
-		this.time = new Time()
 		this.scene = new THREE.Scene()
 		this.camera = new Camera()
 		this.renderer = new Renderer()
 		this.world = new World()
 
 		this.viewport.on('resize', this.resize.bind(this))
-		this.time.on('update', this.update.bind(this))
+		
+		this.world.on('ready', () => {
+			this.scene.add(this.world.group)
+
+			this.camera.fitTo(this.world.text.mesh)
+
+			this.viewport.on('resize', () => {
+				this.camera.fitTo(this.world.text.mesh)
+			})
+
+			this.time = new Time()
+			this.time.on('update', this.update.bind(this))
+		})
 	}
 
 	resize() {
@@ -36,9 +47,6 @@ export default class Sketch {
 		this.debug.begin()
 
 		this.camera.update(elapsed, delta)
-
-		this.world.update(elapsed)
-
 		this.renderer.update()
 
 		this.debug.end()
